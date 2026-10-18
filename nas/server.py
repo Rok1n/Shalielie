@@ -14,7 +14,6 @@ from pathlib import Path
 
 from fastapi import FastAPI, File, HTTPException, Request, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
-from starlette.background import BackgroundTask
 
 ROOT = Path(__file__).resolve().parent.parent
 INDEX = ROOT / "nas" / "static" / "index.html"
@@ -35,6 +34,20 @@ if MAX_TOTAL <= MAX_PHOTO or MAX_TOTAL > 1024 * 1024 * 1024:
     raise RuntimeError("SHALIELIE_MAX_UPLOAD_MB must be between 161 and 1024.")
 
 app = FastAPI(title="Shalielie fnOS", docs_url=None, redoc_url=None, openapi_url=None)
+
+
+class EphemeralFileResponse(FileResponse):
+    """Delete the job on both normal completion and ASGI cancellation."""
+
+    def __init__(self, path, *, cleanup, **kwargs):
+        super().__init__(path, **kwargs)
+        self._cleanup = cleanup
+
+    async def __call__(self, scope, receive, send):
+        try:
+            await super().__call__(scope, receive, send)
+        finally:
+            self._cleanup()
 
 
 @app.on_event("startup")
@@ -189,9 +202,9 @@ def patch(photo: UploadFile = File(...), video: UploadFile | None = File(None)):
             tmp.cleanup()
             GATE.release()
 
-        return FileResponse(result_path, filename=filename, media_type=mime,
-                            background=BackgroundTask(cleanup),
-                            headers={"Cache-Control": "no-store"})
+        return EphemeralFileResponse(result_path, filename=filename, media_type=mime,
+                                     cleanup=cleanup,
+                                     headers={"Cache-Control": "no-store"})
     except Exception:
         if tmp is not None:
             tmp.cleanup()

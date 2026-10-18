@@ -28,3 +28,19 @@ jobs:
         env:
           SHALIELIE_TOKEN: test-only-access-token-0123456789
         run: python -m unittest discover -s nas/tests -v
+
+  docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build amd64 image
+        run: docker build --platform linux/amd64 -f nas/Dockerfile -t shalielie-fnos:test .
+      - name: Verify container boots and responds
+        run: |
+          docker run -d --name shalielie-ci -p 127.0.0.1:18866:8080 -e SHALIELIE_TOKEN=test-only-access-token-0123456789 shalielie-fnos:test
+          trap 'docker logs shalielie-ci; docker rm -f shalielie-ci' EXIT
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:18866/healthz; then exit 0; fi
+            sleep 2
+          done
+          exit 1
