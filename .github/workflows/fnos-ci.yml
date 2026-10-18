@@ -3,6 +3,8 @@ on:
   pull_request:
     paths:
       - "nas/**"
+      - "ios-client/**"
+      - "ios-client/**"
       - "photographic_style_port.py"
       - ".github/workflows/fnos-ci.yml"
   push:
@@ -44,3 +46,19 @@ jobs:
             sleep 2
           done
           exit 1
+
+  ios-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Swift source syntax check (not iOS type-check)
+        run: swiftc -frontend -parse ios-client/Sources/*.swift
+      - name: Validate XcodeGen YAML and Info.plist
+        run: |
+          python - <<'PY'
+          import plistlib
+          from pathlib import Path
+          with Path('ios-client/Sources/Info.plist').open('rb') as f:
+              plistlib.load(f)
+          print('iOS plist parsed')
+          PY
