@@ -1,6 +1,5 @@
 import Foundation
 import Photos
-import PhotosUI
 import UniformTypeIdentifiers
 import CoreLocation
 
@@ -29,21 +28,20 @@ final class NASPhotoProcessor: ObservableObject {
     @Published var isError = false
     @Published var status = "选择原始照片或 Live Photo。NAS 只负责处理，iPhone 将结果原生保存到相册。"
 
-    func process(_ selection: PhotosPickerItem?) async {
+    func process(_ itemIdentifier: String?) async {
         guard !isBusy else { return }
         isBusy = true
         isError = false
         defer { isBusy = false }
         do {
-            guard let selection else { throw NASClientError.noPhotoSelected }
+            guard let itemIdentifier else { throw NASClientError.noPhotoSelected }
             let endpoint = try self.endpoint()
             let secret = token.trimmingCharacters(in: .whitespacesAndNewlines)
             guard secret.count >= 24 else { throw NASClientError.invalidServer }
 
             let auth = await PHPhotoLibrary.requestAuthorization(for: .readWrite)
             guard auth == .authorized || auth == .limited else { throw NASClientError.noAccess }
-            guard let identifier = selection.itemIdentifier,
-                  let asset = PHAsset.fetchAssets(withLocalIdentifiers: [identifier], options: nil).firstObject
+            guard let asset = PHAsset.fetchAssets(withLocalIdentifiers: [itemIdentifier], options: nil).firstObject
             else { throw NASClientError.inaccessibleAsset }
 
             let resources = PHAssetResource.assetResources(for: asset)

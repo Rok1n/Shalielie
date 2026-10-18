@@ -40,7 +40,7 @@ struct NASContentView: View {
                 }
                 Section {
                     Button {
-                        Task { await model.process(selected) }
+                        Task { await model.process(selected?.itemIdentifier) }
                     } label: {
                         HStack {
                             if model.isBusy { ProgressView() }
@@ -50,7 +50,7 @@ struct NASContentView: View {
                     .disabled(model.isBusy || selected == nil || model.address.isEmpty || model.token.isEmpty)
 
                     Text(model.status)
-                        .foregroundStyle(model.isError ? .red : .secondary)
+                        .foregroundStyle(model.isError ? Color.red : Color.secondary)
                         .textSelection(.enabled)
                         .font(.callout)
                 }
