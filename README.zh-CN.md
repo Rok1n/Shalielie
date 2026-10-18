@@ -1,5 +1,7 @@
 # Photographic Style Port
 
+> **本 Fork 新增 [iPhone 原生 Live Photo 导入客户端](ios-client/README.zh-CN.md)**：配合 NAS，在手机 App 内选 Live Photo，NAS 处理后自动经 Photos.framework 将 HEIC 和 pairedVideo 保存为同一个原生动态相册资源（实验版）。ZIP 只是内部传输格式，网页下载 ZIP 本身不等于相册 Live Photo。
+>
 > **本 Fork 新增飞牛 fnOS x86_64 NAS 适配：** Docker Compose 网页上传、原始 HEIC/Live Photo (HEIC+MOV) 处理、令牌访问控制、下载后临时文件清理。详见 [完整中文部署指南](nas/README.zh-CN.md) / [English](nas/README.md)。这不是飞牛原生 .fpk 应用，需要 Docker + Compose。
 
 [English](README.md) | **简体中文**

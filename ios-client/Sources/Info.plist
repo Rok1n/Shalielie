@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDisplayName</key>
+    <string>Shalielie NAS</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>读取你选中的原始 HEIC 和 Live Photo 视频，并将 NAS 处理结果保存为真正的实况照片。</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>将处理后的 HEIC 与配对 MOV 一起创建为相册中的 Live Photo。</string>
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>连接你自己的飞牛 NAS 进行照片处理。</string>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <!-- This development build allows cleartext only to private LAN hosts.
+             The client code rejects public HTTP endpoints. Prefer HTTPS/VPN. -->
+        <key>NSAllowsArbitraryLoads</key>
+        <true/>
+    </dict>
+    <key>UILaunchScreen</key>
+    <dict/>
+</dict>
+</plist>

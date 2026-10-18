@@ -2,6 +2,8 @@
 
 A Docker Compose adapter for Shalielie v0.7.0, designed for x86_64 fnOS hosts with Docker. It wraps the existing HEIC and Live Photo processing engine in an authenticated, mobile-friendly Web app. **Not an fnOS .fpk package.** See the [full Chinese deployment guide](README.zh-CN.md).
 
+**For a true Live Photo in the iOS Photos library, use the [native iPhone importer](../ios-client/README.md). The Web ZIP output is a compatibility fallback, not native Photos import.**
+
 ## Setup
 
 Install Docker/Compose on fnOS and verify the CPU architecture is x86_64.

@@ -2,6 +2,8 @@
 
 这是 Rok1n/Shalielie 基于上游 nathanatgit/Shalielie v0.7.0 的 Docker Web 适配层。保留原有 HEIC/MOV 摄影风格处理引擎，新增移动网页上传、访问令牌、Live Photo 校验、下载与临时文件清理。**适用范围是已安装 Docker + Compose 的飞牛 fnOS x86_64；这不是飞牛原生 .fpk 安装包。**
 
+**如需真正的相册 Live Photo，优先使用 [iPhone 原生客户端](../ios-client/README.zh-CN.md)。网页下载 ZIP 只是手动导出后备方案，不会自动写入 iOS 动态照片。**
+
 ## 兼容性和重要限制
 
 - 主机：Intel/AMD x86_64 NAS，Docker 的 linux/amd64；建议至少 4 GB 可用内存，默认容器上限 3 GB。FFmpeg/HEVC 视频处理耗费 RAM/CPU。
