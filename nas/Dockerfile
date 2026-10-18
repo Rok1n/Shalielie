@@ -9,7 +9,7 @@ COPY nas/requirements.txt /app/nas/requirements.txt
 RUN pip install --no-cache-dir -r /app/nas/requirements.txt
 COPY photographic_style_port.py /app/
 COPY nas/server.py nas/live_worker.py /app/nas/
-COPY nas/static/index.html /app/nas/static/index.html
+COPY nas/static/ /app/nas/static/
 RUN useradd --system --uid 10001 --home /nonexistent --shell /usr/sbin/nologin appuser
 USER 10001:10001
 EXPOSE 8080

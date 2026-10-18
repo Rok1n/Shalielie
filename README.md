@@ -1,5 +1,7 @@
 # Photographic Style Port
 
+> **fnOS x86_64 NAS fork:** Phone upload/download, server-side HEIC + Live Photo processing, access-token protected Docker service, and temporary-file cleanup. [Deployment (English)](nas/README.md) · [飞牛 NAS 部署指南（中文）](nas/README.zh-CN.md). Not an fnOS native .fpk app; this experimental adapter requires Docker Compose.
+
 **English** | [简体中文](README.zh-CN.md)
 
 Current version: v0.7.0

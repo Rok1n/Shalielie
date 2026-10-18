@@ -1,0 +1,30 @@
+name: fnOS NAS adapter tests
+on:
+  pull_request:
+    paths:
+      - "nas/**"
+      - "photographic_style_port.py"
+      - ".github/workflows/fnos-ci.yml"
+  push:
+    branches:
+      - "feat/fnos-x86-web-live-photo"
+    paths:
+      - "nas/**"
+      - "photographic_style_port.py"
+      - ".github/workflows/fnos-ci.yml"
+jobs:
+  transport:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Python dependencies
+        run: pip install -r nas/requirements.txt httpx
+      - name: Syntax check
+        run: python -m compileall -q nas
+      - name: Run HTTP transport unit tests
+        env:
+          SHALIELIE_TOKEN: test-only-access-token-0123456789
+        run: python -m unittest discover -s nas/tests -v

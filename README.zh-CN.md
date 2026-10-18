@@ -1,5 +1,7 @@
 # Photographic Style Port
 
+> **本 Fork 新增飞牛 fnOS x86_64 NAS 适配：** Docker Compose 网页上传、原始 HEIC/Live Photo (HEIC+MOV) 处理、令牌访问控制、下载后临时文件清理。详见 [完整中文部署指南](nas/README.zh-CN.md) / [English](nas/README.md)。这不是飞牛原生 .fpk 应用，需要 Docker + Compose。
+
 [English](README.md) | **简体中文**
 
 当前版本：v0.7.0

@@ -29,7 +29,7 @@ TIMEOUT = int(os.environ.get("SHALIELIE_TIMEOUT", "600"))
 GATE = threading.BoundedSemaphore(1)
 CHUNK = 1024 * 1024
 
-if not TOKEN or len(TOKEN) < 24:
+if not TOKEN or len(TOKEN) < 24 or TOKEN.startswith("REPLACE_"):
     raise RuntimeError("Set SHALIELIE_TOKEN to a random secret of at least 24 characters.")
 if MAX_TOTAL <= MAX_PHOTO or MAX_TOTAL > 1024 * 1024 * 1024:
     raise RuntimeError("SHALIELIE_MAX_UPLOAD_MB must be between 161 and 1024.")
@@ -78,6 +78,16 @@ def health():
 @app.get("/")
 def index():
     return FileResponse(INDEX, media_type="text/html")
+
+
+@app.get("/style.css")
+def stylesheet():
+    return FileResponse(ROOT / "nas" / "static" / "style.css", media_type="text/css")
+
+
+@app.get("/app.js")
+def javascript():
+    return FileResponse(ROOT / "nas" / "static" / "app.js", media_type="text/javascript")
 
 
 @app.get("/api/status")
