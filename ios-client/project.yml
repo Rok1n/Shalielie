@@ -15,11 +15,11 @@ targets:
       - path: Sources
         excludes:
           - Info.plist
-    info:
-      path: Sources/Info.plist
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.rok1n.ShalielieNAS
+        INFOPLIST_FILE: Sources/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
         TARGETED_DEVICE_FAMILY: "1"
         CODE_SIGN_STYLE: Automatic
         ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS: "NO"

@@ -118,8 +118,10 @@ final class NASPhotoProcessor: ObservableObject {
                 try response.write(to: photoURL, options: .atomic)
                 videoURL = nil
             }
-            guard try FileSniffer.isHEIC(photoURL),
-                  (videoURL == nil || (try FileSniffer.isMOV(videoURL!))) else {
+            guard try FileSniffer.isHEIC(photoURL) else {
+                throw NASClientError.malformedOutput
+            }
+            if let videoURL, try !FileSniffer.isMOV(videoURL) {
                 throw NASClientError.malformedOutput
             }
 

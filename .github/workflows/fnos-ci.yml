@@ -4,7 +4,6 @@ on:
     paths:
       - "nas/**"
       - "ios-client/**"
-      - "ios-client/**"
       - "photographic_style_port.py"
       - ".github/workflows/fnos-ci.yml"
   push:
@@ -12,6 +11,7 @@ on:
       - "feat/fnos-x86-web-live-photo"
     paths:
       - "nas/**"
+      - "ios-client/**"
       - "photographic_style_port.py"
       - ".github/workflows/fnos-ci.yml"
 jobs:
@@ -62,3 +62,15 @@ jobs:
               plistlib.load(f)
           print('iOS plist parsed')
           PY
+
+  ios-build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate Xcode project
+        working-directory: ios-client
+        run: xcodegen generate
+      - name: Build unsigned iOS Simulator app
+        run: xcodebuild -project ios-client/ShalielieNAS.xcodeproj -scheme ShalielieNAS -configuration Debug -sdk iphonesimulator -destination "generic/platform=iOS Simulator" CODE_SIGNING_ALLOWED=NO build
