@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="referrer" content="no-referrer">
+  <title>Shalielie · fnOS NAS</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <main class="wrap">
+    <header>
+      <div class="eyebrow">SHALIELIE / fnOS x86_64</div>
+      <h1>照片摄影风格处理</h1>
+      <p class="lead">使用自己的飞牛 NAS 处理原始 HEIC 照片。要直接存成「照片」App 里的真正 Live Photo，请使用配套 iPhone 原生客户端。原图请自行保留。</p>
+    </header>
+    <section class="panel">
+      <form id="form">
+        <label for="token">NAS 访问令牌</label>
+        <input type="password" id="token" autocomplete="off" required placeholder="填写部署时设置的 SHALIELIE_TOKEN">
+        <p class="hint">只保留在本页运行内存中，不保存在浏览器本地存储。</p>
+
+        <label for="photo">1. 原始照片（必选）</label>
+        <input type="file" id="photo" accept=".heic,.HEIC,.heif,.HEIF,image/heic,image/heif" required>
+        <p class="hint">需原始 HEIC 文件。相册选择器可能自动转换为 JPEG，建议从「文件」App 选择。</p>
+
+        <label for="video">2. Live Photo 视频（可选）</label>
+        <input type="file" id="video" accept=".mov,.MOV,video/quicktime">
+        <p class="hint">只有传入原始 MOV，才能得到完整 Live Photo。两个文件必须属于同一次拍摄，且具有匹配的 Live Photo ID。</p>
+
+        <button id="submit" type="submit">上传至 NAS 并处理</button>
+      </form>
+      <p id="status" role="status" aria-live="polite">等待选择原始照片。</p>
+      <p id="download" hidden><a id="downloadLink" href="#">如果没有自动开始下载，点击此处保存处理结果</a></p>
+    </section>
+    <section class="details">
+      <h2>你会收到什么？</h2>
+      <p><strong>普通 HEIC：</strong>处理后下载一张 HEIC，文件内已有的照片元数据会尽量沿用，上游引擎只补充摄影风格所需的数据。</p>
+      <p><strong>Live Photo：</strong>下载包含 HEIC + MOV 的 ZIP，两份文件保留匹配关系。iPhone「文件」App 可以保存 ZIP，但解压后直接存入「照片」App 不保证自动恢复 Live Photo 动态效果；可靠导入方法需要在目标设备上验证。</p>
+      <p><strong>隐私：</strong>上传和结果只存在 NAS 当前任务的临时目录中，文件响应完成后会删除，异常会清理。断电或进程崩溃时，可能留下临时数据，服务重启时会清理。</p>
+      <p class="attention"><strong>安全：</strong>请在可信局域网或经 VPN 访问，不要直接将 HTTP 端口映射到公网。摄影风格能否在「照片」中生效取决于源文件和 iOS 版本。</p>
+    </section>
+    <footer>Based on Shalielie v0.7.0 · <a href="https://github.com/nathanatgit/Shalielie" target="_blank" rel="noopener noreferrer">Upstream project</a></footer>
+  </main>
+</body>
+</html>

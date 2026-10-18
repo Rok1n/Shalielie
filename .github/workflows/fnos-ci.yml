@@ -1,0 +1,76 @@
+name: fnOS NAS adapter tests
+on:
+  pull_request:
+    paths:
+      - "nas/**"
+      - "ios-client/**"
+      - "photographic_style_port.py"
+      - ".github/workflows/fnos-ci.yml"
+  push:
+    branches:
+      - "feat/fnos-x86-web-live-photo"
+    paths:
+      - "nas/**"
+      - "ios-client/**"
+      - "photographic_style_port.py"
+      - ".github/workflows/fnos-ci.yml"
+jobs:
+  transport:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Python dependencies
+        run: pip install -r nas/requirements.txt httpx
+      - name: Syntax check
+        run: python -m compileall -q nas
+      - name: Run HTTP transport unit tests
+        env:
+          SHALIELIE_TOKEN: test-only-access-token-0123456789
+        run: python -m unittest discover -s nas/tests -v
+
+  docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build amd64 image
+        run: docker build --platform linux/amd64 -f nas/Dockerfile -t shalielie-fnos:test .
+      - name: Verify container boots and responds
+        run: |
+          docker run -d --name shalielie-ci -p 127.0.0.1:18866:8080 -e SHALIELIE_TOKEN=test-only-access-token-0123456789 shalielie-fnos:test
+          trap 'docker logs shalielie-ci; docker rm -f shalielie-ci' EXIT
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:18866/healthz; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+
+  ios-syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Swift source syntax check (not iOS type-check)
+        run: swiftc -frontend -parse ios-client/Sources/*.swift
+      - name: Validate XcodeGen YAML and Info.plist
+        run: |
+          python - <<'PY'
+          import plistlib
+          from pathlib import Path
+          with Path('ios-client/Sources/Info.plist').open('rb') as f:
+              plistlib.load(f)
+          print('iOS plist parsed')
+          PY
+
+  ios-build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate Xcode project
+        working-directory: ios-client
+        run: xcodegen generate
+      - name: Build unsigned iOS Simulator app
+        run: xcodebuild -project ios-client/ShalielieNAS.xcodeproj -scheme ShalielieNAS -configuration Debug -sdk iphonesimulator -destination "generic/platform=iOS Simulator" CODE_SIGNING_ALLOWED=NO build

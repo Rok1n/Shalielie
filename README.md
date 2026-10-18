@@ -1,5 +1,9 @@
 # Photographic Style Port
 
+> **[Native iPhone importer](ios-client/README.md):** select an original Live Photo, let the NAS patch HEIC+MOV, then create an actual Live Photo asset using Photos.framework. The ZIP is a private transfer envelope, not the result in Photos. Experimental iOS source, requires Mac Xcode signing.
+>
+> **fnOS x86_64 NAS fork:** Phone upload/download, server-side HEIC + Live Photo processing, access-token protected Docker service, and temporary-file cleanup. [Deployment (English)](nas/README.md) · [飞牛 NAS 部署指南（中文）](nas/README.zh-CN.md). Not an fnOS native .fpk app; this experimental adapter requires Docker Compose.
+
 **English** | [简体中文](README.zh-CN.md)
 
 Current version: v0.7.0

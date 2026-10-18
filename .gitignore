@@ -83,3 +83,6 @@ tests/web/.cache/
 # Rendered at deploy by tools/render-about.mjs
 web/about.html
 web/about.zh.html
+
+# fnOS Web adapter: never commit NAS token
+nas/.env
