@@ -31,7 +31,9 @@ struct NASContentView: View {
                         .foregroundStyle(.secondary)
                 }
                 Section("选择原始照片") {
-                    PhotosPicker(selection: $selected, matching: .images, preferredItemEncoding: .current) {
+                    PhotosPicker(selection: $selected, matching: .images,
+                                 preferredItemEncoding: .current,
+                                 photoLibrary: .shared()) {
                         Label(selected == nil ? "从相册选择照片 / Live Photo" : "已选择照片（可重新选择）",
                               systemImage: "photo.on.rectangle")
                     }
