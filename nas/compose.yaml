@@ -1,0 +1,29 @@
+name: shalielie-fnos
+services:
+  shalielie:
+    build:
+      context: ..
+      dockerfile: nas/Dockerfile
+    platform: linux/amd64
+    container_name: shalielie-fnos
+    restart: unless-stopped
+    init: true
+    ports:
+      - "${SHALIELIE_PORT:-8766}:8080"
+    environment:
+      SHALIELIE_TOKEN: "${SHALIELIE_TOKEN:?Copy nas/.env.example to nas/.env and set a random token}"
+      SHALIELIE_MAX_UPLOAD_MB: "${SHALIELIE_MAX_UPLOAD_MB:-320}"
+      SHALIELIE_TIMEOUT: "${SHALIELIE_TIMEOUT:-600}"
+    # No persistent volume. Files in the writable container layer are deleted after download.
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    pids_limit: 256
+    mem_limit: 3g
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/healthz',timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
